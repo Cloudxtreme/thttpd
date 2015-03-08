@@ -3657,7 +3657,7 @@ really_start_request( httpd_conn* hc, struct timeval* nowP )
     ** a file that's not set world-readable and yet somehow is
     ** readable by the HTTP server and therefore the *whole* world.
     */
-    if ( ! ( hc->sb.st_mode & ( S_IROTH | S_IXOTH ) ) )
+    if ( ! ( hc->sb.st_mode & ( S_IRUSR | S_IXUSR ) ) )
 	{
 	syslog(
 	    LOG_INFO,
@@ -3760,7 +3760,7 @@ really_start_request( httpd_conn* hc, struct timeval* nowP )
 	(void) strcpy( hc->expnfilename, cp );
 
 	/* Now, is the index version world-readable or world-executable? */
-	if ( ! ( hc->sb.st_mode & ( S_IROTH | S_IXOTH ) ) )
+	if ( ! ( hc->sb.st_mode & ( S_IRUSR | S_IXUSR ) ) )
 	    {
 	    syslog(
 		LOG_INFO,
@@ -3824,7 +3824,7 @@ really_start_request( httpd_conn* hc, struct timeval* nowP )
 
     /* Is it world-executable and in the CGI area? */
     if ( hc->hs->cgi_pattern != (char*) 0 &&
-	 ( hc->sb.st_mode & S_IXOTH ) &&
+	 ( hc->sb.st_mode & S_IXUSR ) &&
 	 match( hc->hs->cgi_pattern, hc->expnfilename ) )
 	return cgi( hc );
 
@@ -3832,7 +3832,7 @@ really_start_request( httpd_conn* hc, struct timeval* nowP )
     ** trying to either serve or run a non-CGI file as CGI.   Either case
     ** is prohibited.
     */
-    if ( hc->sb.st_mode & S_IXOTH )
+    if ( hc->sb.st_mode & S_IXUSR )
 	{
 	syslog(
 	    LOG_NOTICE, "%.80s URL \"%.80s\" is executable but isn't CGI",
