@@ -57,17 +57,7 @@
 ** as a security measure that's how you do it, just don't define any
 ** pattern here and don't run with the -c flag.
 */
-#ifdef notdef
-/* Some sample patterns.  Allow programs only in one central directory: */
 #define CGI_PATTERN "/cgi-bin/*"
-/* Allow programs in a central directory, or anywhere in a trusted
-** user's tree: */
-#define CGI_PATTERN "/cgi-bin/*|/jef/**"
-/* Allow any program ending with a .cgi: */
-#define CGI_PATTERN "**.cgi"
-/* When virtual hosting, enable the central directory on every host: */
-#define CGI_PATTERN "/*/cgi-bin/*"
-#endif
 
 /* CONFIGURE: How many seconds to allow CGI programs to run before killing
 ** them.  This is in case someone writes a CGI program that goes into an
