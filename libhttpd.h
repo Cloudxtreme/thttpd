@@ -146,9 +146,14 @@ typedef struct {
 
 /* Methods. */
 #define METHOD_UNKNOWN 0
-#define METHOD_GET 1
-#define METHOD_HEAD 2
-#define METHOD_POST 3
+#define METHOD_OPTIONS 1
+#define METHOD_GET 2
+#define METHOD_HEAD 3
+#define METHOD_POST 4
+#define METHOD_PUT 5
+#define METHOD_DELETE 6
+#define METHOD_TRACE 7
+#define METHOD_CONNECT 8
 
 /* States for checked_state. */
 #define CHST_FIRSTWORD 0

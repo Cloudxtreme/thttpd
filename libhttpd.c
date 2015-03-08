@@ -907,7 +907,7 @@ send_authenticate( httpd_conn* hc, char* realm )
     /* If the request was a POST then there might still be data to be read,
     ** so we need to do a lingering close.
     */
-    if ( hc->method == METHOD_POST )
+    if ( hc->method == METHOD_POST || hc->method == METHOD_PUT )
 	hc->should_linger = 1;
     }
 
@@ -1207,9 +1207,14 @@ httpd_method_str( int method )
     {
     switch ( method )
 	{
+	case METHOD_OPTIONS: return "OPTIONS";
 	case METHOD_GET: return "GET";
 	case METHOD_HEAD: return "HEAD";
 	case METHOD_POST: return "POST";
+	case METHOD_PUT: return "PUT";
+	case METHOD_DELETE: return "DELETE";
+	case METHOD_TRACE: return "TRACE";
+	case METHOD_CONNECT: return "CONNECT";
 	default: return "UNKNOWN";
 	}
     }
@@ -2022,12 +2027,22 @@ httpd_parse_request( httpd_conn* hc )
 	return -1;
 	}
 
-    if ( strcasecmp( method_str, httpd_method_str( METHOD_GET ) ) == 0 )
+    if ( strcasecmp( method_str, httpd_method_str( METHOD_OPTIONS ) ) == 0 )
+	hc->method = METHOD_OPTIONS;
+    else if ( strcasecmp( method_str, httpd_method_str( METHOD_GET ) ) == 0 )
 	hc->method = METHOD_GET;
     else if ( strcasecmp( method_str, httpd_method_str( METHOD_HEAD ) ) == 0 )
 	hc->method = METHOD_HEAD;
     else if ( strcasecmp( method_str, httpd_method_str( METHOD_POST ) ) == 0 )
 	hc->method = METHOD_POST;
+    else if ( strcasecmp( method_str, httpd_method_str( METHOD_PUT ) ) == 0 )
+	hc->method = METHOD_PUT;
+    else if ( strcasecmp( method_str, httpd_method_str( METHOD_DELETE ) ) == 0 )
+	hc->method = METHOD_DELETE;
+    else if ( strcasecmp( method_str, httpd_method_str( METHOD_TRACE ) ) == 0 )
+	hc->method = METHOD_TRACE;
+    else if ( strcasecmp( method_str, httpd_method_str( METHOD_CONNECT ) ) == 0 )
+	hc->method = METHOD_CONNECT;
     else
 	{
 	httpd_send_err( hc, 501, err501title, "", err501form, method_str );
@@ -3416,7 +3431,7 @@ cgi_child( httpd_conn* hc )
     ** interposer process, depending on if we've read some of the data
     ** into our buffer.
     */
-    if ( hc->method == METHOD_POST && hc->read_idx > hc->checked_idx )
+    if ( (hc->method == METHOD_POST || hc->method == METHOD_PUT) && hc->read_idx > hc->checked_idx )
 	{
 	int p[2];
 
@@ -3567,7 +3582,7 @@ cgi( httpd_conn* hc )
     int r;
     ClientData client_data;
 
-    if ( hc->method == METHOD_GET || hc->method == METHOD_POST )
+    if ( hc->method == METHOD_GET || hc->method == METHOD_POST || hc->method == METHOD_PUT || hc->method == METHOD_DELETE )
 	{
 	if ( hc->hs->cgi_limit != 0 && hc->hs->cgi_count >= hc->hs->cgi_limit )
 	    {
@@ -3638,7 +3653,7 @@ really_start_request( httpd_conn* hc, struct timeval* nowP )
     expnlen = strlen( hc->expnfilename );
 
     if ( hc->method != METHOD_GET && hc->method != METHOD_HEAD &&
-	 hc->method != METHOD_POST )
+	 hc->method != METHOD_POST && hc->method != METHOD_PUT && hc->method != METHOD_DELETE )
 	{
 	httpd_send_err(
 	    hc, 501, err501title, "", err501form, httpd_method_str( hc->method ) );
