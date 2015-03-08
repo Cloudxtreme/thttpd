@@ -164,12 +164,6 @@
     "canonical.name.two/alternate.name.two"
 #endif
 
-/* CONFIGURE: Undefine this if you want thttpd to hide its specific version
-** when returning into to browsers.  Instead it'll just say "thttpd" with
-** no version.
-*/
-#define SHOW_SERVER_VERSION
-
 /* CONFIGURE: Define this if you want to always chroot(), without having
 ** to give the -r command line flag.  Some people like this as a security
 ** measure, to prevent inadvertant exposure by accidentally running without -r.
