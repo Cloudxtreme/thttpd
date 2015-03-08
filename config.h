@@ -313,15 +313,6 @@
 */
 #define INDEX_NAMES "index.html", "index.htm", "index.xhtml", "index.xht", "Default.htm", "index.cgi"
 
-/* CONFIGURE: If this is defined then thttpd will automatically generate
-** index pages for directories that don't have an explicit index file.
-** If you want to disable this behavior site-wide, perhaps for security
-** reasons, just undefine this.  Note that you can disable indexing of
-** individual directories by merely doing a "chmod 711" on them - the
-** standard Unix file permission to allow file access but disable "ls".
-*/
-#define GENERATE_INDEXES
-
 /* CONFIGURE: Whether to log unknown request headers.  Most sites will not
 ** want to log them, which will save them a bit of CPU time.
 */
