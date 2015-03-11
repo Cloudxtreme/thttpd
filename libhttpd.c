@@ -3652,7 +3652,7 @@ really_start_request( httpd_conn* hc, struct timeval* nowP )
 
     expnlen = strlen( hc->expnfilename );
 
-    if ( hc->method != METHOD_GET && hc->method != METHOD_HEAD &&
+    if ( hc->method != METHOD_OPTIONS && hc->method != METHOD_GET && hc->method != METHOD_HEAD &&
 	 hc->method != METHOD_POST && hc->method != METHOD_PUT && hc->method != METHOD_DELETE )
 	{
 	httpd_send_err(
