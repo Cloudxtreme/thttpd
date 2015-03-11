@@ -3582,7 +3582,7 @@ cgi( httpd_conn* hc )
     int r;
     ClientData client_data;
 
-    if ( hc->method == METHOD_GET || hc->method == METHOD_POST || hc->method == METHOD_PUT || hc->method == METHOD_DELETE )
+    if ( hc->method == METHOD_OPTIONS || hc->method == METHOD_GET || hc->method == METHOD_POST || hc->method == METHOD_PUT || hc->method == METHOD_DELETE )
 	{
 	if ( hc->hs->cgi_limit != 0 && hc->hs->cgi_count >= hc->hs->cgi_limit )
 	    {
